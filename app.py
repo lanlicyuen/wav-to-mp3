@@ -15,7 +15,23 @@ class WavToMp3Converter:
         self.root.title("咖喱牌Wav转Mp3")
         self.root.geometry("400x200")
         self.root.iconbitmap(resource_path("icon.ico"))
+        self.ffmpeg_path = resource_path("ffmpeg.exe")
+        
+        # 创建菜单栏
+        self.create_menu()
         self.create_widgets()
+
+    def create_menu(self):
+        menubar = tk.Menu(self.root)
+        self.root.config(menu=menubar)
+
+        # 创建"关于"菜单
+        about_menu = tk.Menu(menubar, tearoff=0)
+        menubar.add_cascade(label="关于", menu=about_menu)
+        about_menu.add_command(label="关于我", command=self.show_about)
+
+    def show_about(self):
+        messagebox.showinfo("关于", "作者：默默\n版本：V1.1")
 
     def create_widgets(self):
         frame = tk.Frame(self.root, padx=20, pady=20)
@@ -46,7 +62,7 @@ class WavToMp3Converter:
         try:
             mp3_path = wav_path.replace(".wav", ".mp3")
             subprocess.run(
-                ["ffmpeg", "-i", wav_path, mp3_path],
+                [self.ffmpeg_path, "-i", wav_path, mp3_path],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 creationflags=subprocess.CREATE_NO_WINDOW
